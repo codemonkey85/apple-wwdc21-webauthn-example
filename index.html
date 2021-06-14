@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <link href="https://uploads-ssl.webflow.com/5e6f5bf4a2ae9702a833f3ee/5e8cbd708343ea2420740fe0_Favicon_32x32.png"
+          rel="shortcut icon" type="image/x-icon">
+    <title>Webauthn Example</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Webauthn Example (usernameless)</a>
+</nav>
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-sm">
+            <form class="form" onsubmit="do_reg(event);">
+                <h3 class="text-center text-info">Register</h3>
+                <div class="form-group has-validation">
+                    <label for="username" class="text-info">Username:</label>
+                    <br>
+                    <input type="text" name="username" id="username" class="form-control">
+                    <div id="invalidRegistrationFeedback" class="invalid-feedback">Unknown Error</div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info btn-md">Register</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm">
+            <form class="form" onsubmit="do_auth(event);">
+                <h3 class="text-center text-info">Login</h3>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-info btn-md mt-4">Sign in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teamhanko/hanko-webauthn@latest/dist/browser-global/hanko-webauthn.browser-global.js"></script>
+<script type="application/javascript">
+
+    function showRegError(error) {
+        console.log(error)
+        document.getElementById("username").classList.add("is-invalid")
+        document.getElementById("invalidRegistrationFeedback").innerHTML = error
+    }
+
+    async function do_reg(event) {
+        event.preventDefault()
+        const username = document.getElementById("username").value
+        const regInitResponse = await fetch('/registration_initialize?user_name=' + username, {
+            method: 'POST'
+        })
+
+        if (!regInitResponse.ok) {
+            const error = (await regInitResponse.json()).error
+            showRegError(error)
+        }
+
+        const creationOptions = await regInitResponse.json()
+
+        const authenticatorResponse = await hankoWebAuthn.create(creationOptions)
+
+        const registrationResponse = await fetch('/registration_finalize', {
+            method: 'POST',
+            body: JSON.stringify(authenticatorResponse)
+        })
+
+        if (!registrationResponse.ok) {
+            const error = (await registrationResponse.json()).error
+            showRegError(error)
+        } else {
+            location.assign('/content')
+        }
+    }
+
+    async function do_auth(event) {
+        event.preventDefault()
+        const authInitResponse = await fetch('/authentication_initialize', {
+            method: 'POST'
+        })
+
+        if (!authInitResponse.ok) {
+            // TODO: showError
+            console.log((await authInitResponse.json()).error)
+        }
+
+        const authOptions = await authInitResponse.json()
+
+        const authenticatorResponse = await hankoWebAuthn.get(authOptions)
+
+        const authenticationResponse = await fetch('authentication_finalize', {
+            method: 'POST',
+            body: JSON.stringify(authenticatorResponse)
+        })
+
+        if (!authenticationResponse.ok) {
+            // TODO: show Error
+            console.log((await authenticationResponse.json()).error)
+        } else {
+            location.assign('/content')
+        }
+    }
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+</html>
