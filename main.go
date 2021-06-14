@@ -39,7 +39,7 @@ func main() {
 
 	// Get the registration request from the Hanko API
 	r.POST("/registration_initialize", func(c *gin.Context) {
-		userName := strings.TrimSpace(c.Query("user_name"))
+		userName := strings.TrimSpace(c.PostForm("user_name"))
 
 		// If no username was given return an error
 		if userName == "" {
