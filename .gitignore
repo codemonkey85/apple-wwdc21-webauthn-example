@@ -9,3 +9,5 @@ out/
 
 .test
 
+user.db
+user.db.lock

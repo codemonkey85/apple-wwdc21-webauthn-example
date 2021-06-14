@@ -1,6 +1,9 @@
 package main
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -9,14 +12,12 @@ import (
 	"github.com/teamhanko/hanko-sdk-golang/webauthn"
 	"gitlab.com/hanko/simple-webauthn-example/config"
 	"gitlab.com/hanko/simple-webauthn-example/models"
-	"net/http"
-	"strings"
 )
 
 var apiClient *webauthn.Client
 
 func init() {
-	// Create a hanko api client
+	// Create a Hanko API client
 	apiClient = webauthn.NewClient(config.C.ApiUrl, config.C.ApiSecret).
 		WithHmac(config.C.ApiKeyId).
 		WithLogLevel(log.DebugLevel)
@@ -25,7 +26,7 @@ func init() {
 func main() {
 	r := gin.Default()
 
-	// init session cookie store
+	// Init session cookie store
 	sessionStore := cookie.NewStore([]byte("superSecureSecret"))
 	r.Use(sessions.Sessions("webauthn-session", sessionStore))
 
@@ -33,10 +34,10 @@ func main() {
 	r.StaticFile("/favicon.ico", "./assets/favicon.ico")
 	r.StaticFile("/", "./index.html")
 
-	// Load html files to use as an template
+	// Load html files to use as template
 	r.LoadHTMLFiles("./content.html")
 
-	// Get the registration request from the Hanko-API
+	// Get the registration request from the Hanko API
 	r.POST("/registration_initialize", func(c *gin.Context) {
 		userName := strings.TrimSpace(c.Query("user_name"))
 
@@ -66,7 +67,7 @@ func main() {
 			return
 		}
 
-		// Create the request options for the Hanko-API
+		// Create the request options for the Hanko API
 		user := webauthn.NewRegistrationInitializationUser(userModel.ID, userModel.Name)
 
 		authenticatorSelection := webauthn.NewAuthenticatorSelection().
@@ -78,27 +79,27 @@ func main() {
 			WithAuthenticatorSelection(authenticatorSelection).
 			WithConveyancePreference(webauthn.PreferNoAttestation)
 
-		// Get the registration request from the Hanko-API with the given request options
+		// Get the registration request from the Hanko API with the given request options
 		response, apiErr := apiClient.InitializeRegistration(request)
 		if apiErr != nil {
 			c.JSON(apiErr.StatusCode, gin.H{"error": apiErr.Error()})
 			return
 		}
 
-		// return the registration request
+		// Return the registration request
 		c.JSON(http.StatusOK, response)
 	})
 
-	// Send the authenticator response to the Hanko-API
+	// Send the authenticator response to the Hanko API
 	r.POST("/registration_finalize", func(c *gin.Context) {
-		// parse the authenticator response
+		// Parse the authenticator response
 		request, err := webauthn.ParseRegistrationFinalizationRequest(c.Request.Body)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		// send the authenticator response to the Hanko-API
+		// Send the authenticator response to the Hanko API
 		response, apiErr := apiClient.FinalizeRegistration(request)
 		if apiErr != nil {
 			c.JSON(apiErr.StatusCode, gin.H{"error": apiErr.Error()})
@@ -113,14 +114,14 @@ func main() {
 		c.JSON(http.StatusOK, response)
 	})
 
-	// Get an authentication request from the Hanko-API
+	// Get an authentication request from the Hanko API
 	r.POST("/authentication_initialize", func(c *gin.Context) {
 		// Create the request options
 		request := webauthn.NewAuthenticationInitializationRequest().
 			WithUserVerification("required").
 			WithAuthenticatorAttachment("platform")
 
-		// Get the authentication request from the Hanko-API with the given request options
+		// Get the authentication request from the Hanko API with the given request options
 		response, apiErr := apiClient.InitializeAuthentication(request)
 		if apiErr != nil {
 			c.JSON(apiErr.StatusCode, gin.H{"error": apiErr.Error()})
@@ -130,7 +131,7 @@ func main() {
 		c.JSON(http.StatusOK, response)
 	})
 
-	// TODO: Send the authenticator response to the Hanko-API
+	// Send the authenticator response to the Hanko API
 	r.POST("/authentication_finalize", func(c *gin.Context) {
 		// Parse the authenticator response
 		request, err := webauthn.ParseAuthenticationFinalizationRequest(c.Request.Body)
@@ -139,7 +140,7 @@ func main() {
 			return
 		}
 
-		// Send the authenticator reponse to the Hanko-API
+		// Send the authenticator reponse to the Hanko API
 		response, apiErr := apiClient.FinalizeAuthentication(request)
 		if apiErr != nil {
 			c.JSON(apiErr.StatusCode, gin.H{"error": apiErr.Error()})
@@ -154,7 +155,7 @@ func main() {
 		c.JSON(http.StatusOK, response)
 	})
 
-	// Return the content page, if the user as a valid session else redirect to sign in/register page
+	// Return the content page, if the user has a valid session else redirect to sign in/register page
 	r.GET("/content", func(c *gin.Context) {
 		session := sessions.Default(c)
 		userId := session.Get("userId")
@@ -176,7 +177,7 @@ func main() {
 		})
 	})
 
-	// Delete the session fo a user
+	// Delete the session for a user
 	r.GET("/logout", func(c *gin.Context) {
 		session := sessions.Default(c)
 		session.Set("userId", nil)
