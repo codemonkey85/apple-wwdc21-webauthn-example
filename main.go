@@ -10,8 +10,8 @@ import (
 	"github.com/gofrs/uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/teamhanko/hanko-sdk-golang/webauthn"
-	"gitlab.com/hanko/simple-webauthn-example/config"
-	"gitlab.com/hanko/simple-webauthn-example/models"
+	"gitlab.com/hanko/apple-wwdc21-webauthn-example/config"
+	"gitlab.com/hanko/apple-wwdc21-webauthn-example/models"
 )
 
 var apiClient *webauthn.Client

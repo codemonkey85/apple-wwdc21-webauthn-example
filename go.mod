@@ -1,4 +1,4 @@
-module gitlab.com/hanko/simple-webauthn-example
+module gitlab.com/hanko/apple-wwdc21-webauthn-example
 
 go 1.15
 
