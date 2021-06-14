@@ -1,16 +1,17 @@
 package main
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	uuid "github.com/satori/go.uuid"
+	"github.com/gofrs/uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/teamhanko/hanko-sdk-golang/webauthn"
 	"gitlab.com/hanko/simple-webauthn-example/config"
 	"gitlab.com/hanko/simple-webauthn-example/models"
-	"net/http"
-	"strings"
 )
 
 var apiClient *webauthn.Client
@@ -59,7 +60,13 @@ func main() {
 		}
 
 		// If the username doesn't already exists, create a new user
-		userModel = models.NewUser(uuid.NewV4().String(), userName)
+
+		// Create a Version 4 UUID as user id
+		uuid, err := uuid.NewV4()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		userModel = models.NewUser(uuid.String(), userName)
 		err = userModel.Save()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
