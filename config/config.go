@@ -9,9 +9,10 @@ import (
 )
 
 type config struct {
-	ApiUrl    string
-	ApiSecret string
-	ApiKeyId  string
+	ApiUrl        string
+	ApiSecret     string
+	ApiKeyId      string
+	SessionSecret string
 }
 
 var C *config

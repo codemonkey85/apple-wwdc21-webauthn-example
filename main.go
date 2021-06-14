@@ -27,7 +27,7 @@ func main() {
 	r := gin.Default()
 
 	// Init session cookie store
-	sessionStore := cookie.NewStore([]byte("superSecureSecret"))
+	sessionStore := cookie.NewStore([]byte(config.C.SessionSecret))
 	r.Use(sessions.Sessions("webauthn-session", sessionStore))
 
 	r.Static("/assets", "./assets")
