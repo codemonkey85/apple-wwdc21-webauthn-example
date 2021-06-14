@@ -1,3 +1,4 @@
-apiUrl: <YOUR_API_URL>
-apiSecret: YOUR_API_SECRET>
-apiKeyId: <YOUR_API_KEY_ID>
+apiUrl: "YOUR_API_URL"
+apiKeyId: "YOUR_API_KEY_ID"
+apiSecret: "YOUR_API_SECRET"
+
