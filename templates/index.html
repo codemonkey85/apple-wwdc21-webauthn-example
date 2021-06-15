@@ -27,33 +27,33 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@teamhanko/hanko-webauthn@latest/dist/browser-global/hanko-webauthn.browser-global.js"></script>
 <script type="application/javascript">
-    async function do_auth(event) {
-        event.preventDefault()
-        const authInitResponse = await fetch('/authentication_initialize', {
-            method: 'POST'
-        })
+async function do_auth(event) {
+    event.preventDefault()
+    const authInitResponse = await fetch('/authentication_initialize', {
+        method: 'POST'
+    })
 
-        if (!authInitResponse.ok) {
-            // TODO: showError
-            console.log((await authInitResponse.json()).error)
-        }
-
-        const authOptions = await authInitResponse.json()
-
-        const authenticatorResponse = await hankoWebAuthn.get(authOptions)
-
-        const authenticationResponse = await fetch('authentication_finalize', {
-            method: 'POST',
-            body: JSON.stringify(authenticatorResponse)
-        })
-
-        if (!authenticationResponse.ok) {
-            // TODO: show Error
-            console.log((await authenticationResponse.json()).error)
-        } else {
-            location.assign('/content')
-        }
+    if (!authInitResponse.ok) {
+        // TODO: showError
+        console.log((await authInitResponse.json()).error)
     }
+
+    const authOptions = await authInitResponse.json()
+
+    const authenticatorResponse = await hankoWebAuthn.get(authOptions)
+
+    const authenticationResponse = await fetch('/authentication_finalize', {
+        method: 'POST',
+        body: JSON.stringify(authenticatorResponse)
+    })
+
+    if (!authenticationResponse.ok) {
+        // TODO: show Error
+        console.log((await authenticationResponse.json()).error)
+    } else {
+        location.assign('/content')
+    }
+}
 </script>
 </body>
 </html>
