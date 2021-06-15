@@ -32,11 +32,11 @@ func main() {
 
 	r.Static("/assets", "./assets")
 	r.StaticFile("/favicon.ico", "./assets/favicon.ico")
-	r.StaticFile("/", "./index.html")
-	r.StaticFile("/register", "./register.html")
+	r.StaticFile("/", "./templates/index.html")
+	r.StaticFile("/register", "./templates/register.html")
 
 	// Load html files to use as template
-	r.LoadHTMLFiles("./content.html")
+	r.LoadHTMLFiles("./templates/content.html")
 
 	// Get the registration request from the Hanko API
 	r.POST("/registration_initialize", func(c *gin.Context) {
