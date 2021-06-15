@@ -125,8 +125,8 @@ func main() {
 	r.POST("/authentication_initialize", func(c *gin.Context) {
 		// Create the request options
 		request := webauthn.NewAuthenticationInitializationRequest().
-			WithUserVerification("required").
-			WithAuthenticatorAttachment("platform")
+			WithUserVerification(webauthn.VerificationRequired).
+			WithAuthenticatorAttachment(webauthn.Platform)
 
 		// Get the authentication request from the Hanko API with the given request options
 		response, apiErr := apiClient.InitializeAuthentication(request)
