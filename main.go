@@ -33,6 +33,7 @@ func main() {
 	r.Static("/assets", "./assets")
 	r.StaticFile("/favicon.ico", "./assets/favicon.ico")
 	r.StaticFile("/", "./index.html")
+	r.StaticFile("/register", "./register.html")
 
 	// Load html files to use as template
 	r.LoadHTMLFiles("./content.html")

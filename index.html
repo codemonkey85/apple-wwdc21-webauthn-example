@@ -14,25 +14,12 @@
 <div class="container pt-5">
     <div class="row">
         <div class="col-sm">
-            <form class="form" onsubmit="do_reg(event);">
-                <h3 class="text-center text-info">Register</h3>
-                <div class="form-group has-validation">
-                    <label for="username" class="text-info">Username:</label>
-                    <br>
-                    <input type="text" name="username" id="username" class="form-control">
-                    <div id="invalidRegistrationFeedback" class="invalid-feedback">Unknown Error</div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-info btn-md">Register</button>
-                </div>
-            </form>
-        </div>
-        <div class="col-sm">
             <form class="form" onsubmit="do_auth(event);">
-                <h3 class="text-center text-info">Login</h3>
+                <h3 class="text-center text-info">Welcome</h3>
                 <div class="form-group text-center">
                     <button type="submit" class="btn btn-info btn-md mt-4">Sign in</button>
                 </div>
+                <p class="text-center">Don't have an account? <a href="/register">Register here!</a></p>
             </form>
         </div>
     </div>
@@ -40,48 +27,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@teamhanko/hanko-webauthn@latest/dist/browser-global/hanko-webauthn.browser-global.js"></script>
 <script type="application/javascript">
-
-    function showRegError(error) {
-        console.log(error)
-        document.getElementById("username").classList.add("is-invalid")
-        document.getElementById("invalidRegistrationFeedback").innerHTML = error
-    }
-
-    async function do_reg(event) {
-        event.preventDefault()
-        const username = document.getElementById("username").value
-        var formBody = [];
-        formBody.push(encodeURIComponent("user_name") + "=" + encodeURIComponent(username));
-        const regInitResponse = await fetch('/registration_initialize', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: formBody
-        })
-
-        if (!regInitResponse.ok) {
-            const error = (await regInitResponse.json()).error
-            showRegError(error)
-        }
-
-        const creationOptions = await regInitResponse.json()
-
-        const authenticatorResponse = await hankoWebAuthn.create(creationOptions)
-
-        const registrationResponse = await fetch('/registration_finalize', {
-            method: 'POST',
-            body: JSON.stringify(authenticatorResponse)
-        })
-
-        if (!registrationResponse.ok) {
-            const error = (await registrationResponse.json()).error
-            showRegError(error)
-        } else {
-            location.assign('/content')
-        }
-    }
-
     async function do_auth(event) {
         event.preventDefault()
         const authInitResponse = await fetch('/authentication_initialize', {

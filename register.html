@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <title>Apple Passkey login with Hanko</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Using Passkeys to login usernameless with the Hanko API</a>
+</nav>
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-sm">
+            <form class="form" onsubmit="do_reg(event);">
+                <h3 class="text-center text-info">Register</h3>
+                <div class="form-group has-validation">
+                    <label for="username" class="text-info">Username:</label>
+                    <br>
+                    <input type="text" name="username" id="username" class="form-control">
+                    <div id="invalidRegistrationFeedback" class="invalid-feedback">Unknown Error</div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info btn-md">Register</button>
+                </div>
+            </form>
+            <p class="text-center">Already have an account? <a href="/">Login here!</a></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@teamhanko/hanko-webauthn@latest/dist/browser-global/hanko-webauthn.browser-global.js"></script>
+<script type="application/javascript">
+
+    function showRegError(error) {
+        console.log(error)
+        document.getElementById("username").classList.add("is-invalid")
+        document.getElementById("invalidRegistrationFeedback").innerHTML = error
+    }
+
+    async function do_reg(event) {
+        event.preventDefault()
+        const username = document.getElementById("username").value
+        var formBody = [];
+        formBody.push(encodeURIComponent("user_name") + "=" + encodeURIComponent(username));
+        const regInitResponse = await fetch('/registration_initialize', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: formBody
+        })
+
+        if (!regInitResponse.ok) {
+            const error = (await regInitResponse.json()).error
+            showRegError(error)
+        }
+
+        const creationOptions = await regInitResponse.json()
+
+        const authenticatorResponse = await hankoWebAuthn.create(creationOptions)
+
+        const registrationResponse = await fetch('/registration_finalize', {
+            method: 'POST',
+            body: JSON.stringify(authenticatorResponse)
+        })
+
+        if (!registrationResponse.ok) {
+            const error = (await registrationResponse.json()).error
+            showRegError(error)
+        } else {
+            location.assign('/content')
+        }
+    }
+</script>
+</body>
+</html>
