@@ -1,0 +1,33 @@
+stages:
+  - build
+
+services:
+  - docker:19.03.5-dind
+
+image: docker:19
+
+
+build/branch:
+  stage: build
+  variables:
+    IMG: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}
+  script:
+    - export DATE=$(date +%F.%H%M%S)
+    - docker build -t ${IMG}-${DATE} --build-arg GITLAB_USER=gitlab-ci-token --build-arg GITLAB_ACCESS_TOKEN=${CI_JOB_TOKEN} .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker push ${IMG}-${DATE}
+  except:
+    - tags
+
+
+
+build/tag:
+  stage: build
+  variables:
+    IMG: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+  script:
+    - docker build -t ${IMG} --build-arg GITLAB_USER=gitlab-ci-token --build-arg GITLAB_ACCESS_TOKEN=${CI_JOB_TOKEN} .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker push ${IMG}
+  only:
+    - tags
