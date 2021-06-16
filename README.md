@@ -24,7 +24,11 @@ You need to configure your relying party as http://localhost. If you intend to u
 
 1. Clone this repository and change into the folder:
 
-   `git clone https://github.com/teamhanko/apple-wwdc21-webauthn-example && cd apple-wwdc21-webauthn-example`
+```
+git clone https://github.com/teamhanko/apple-wwdc21-webauthn-example
+
+cd apple-wwdc21-webauthn-example
+```
 
 2. Configure the API URL, API Key ID and API secret in the `config/config.yaml` file:
 
