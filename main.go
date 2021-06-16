@@ -39,8 +39,8 @@ func main() {
 	r.LoadHTMLFiles("./templates/content.html")
 
 	// Get the registration request from the Hanko API
-	r.POST("/registration_initialize", func(c *gin.Context) {
-		userName := strings.TrimSpace(c.PostForm("user_name"))
+	r.GET("/registration_initialize", func(c *gin.Context) {
+		userName := strings.TrimSpace(c.Query("user_name"))
 
 		// If no username was given return an error
 		if userName == "" {
@@ -122,7 +122,7 @@ func main() {
 	})
 
 	// Get an authentication request from the Hanko API
-	r.POST("/authentication_initialize", func(c *gin.Context) {
+	r.GET("/authentication_initialize", func(c *gin.Context) {
 		// Create the request options
 		request := webauthn.NewAuthenticationInitializationRequest().
 			WithUserVerification(webauthn.VerificationRequired).
