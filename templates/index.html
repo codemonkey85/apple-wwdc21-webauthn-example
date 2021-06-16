@@ -30,7 +30,7 @@
 async function do_auth(event) {
     event.preventDefault()
     const authInitResponse = await fetch('/authentication_initialize', {
-        method: 'POST'
+        method: 'GET'
     })
 
     if (!authInitResponse.ok) {

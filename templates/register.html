@@ -43,14 +43,9 @@
     async function do_reg(event) {
         event.preventDefault()
         const username = document.getElementById("username").value
-        var formBody = [];
-        formBody.push(encodeURIComponent("user_name") + "=" + encodeURIComponent(username));
-        const regInitResponse = await fetch('/registration_initialize', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: formBody
+        let query = '?user_name=' + username
+        const regInitResponse = await fetch('/registration_initialize' + query, {
+            method: 'GET'
         })
 
         if (!regInitResponse.ok) {
