@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+
 	"github.com/boltdb/bolt"
 )
 
@@ -16,7 +17,7 @@ func init() {
 }
 
 func connect() (db *bolt.DB, err error) {
-	db, err = bolt.Open("user.db", 0600, nil)
+	db, err = bolt.Open("db/user.db", 0600, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create db: %s", err)
 	}

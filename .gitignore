@@ -8,6 +8,3 @@ out/
 *.dylib
 
 .test
-
-user.db
-user.db.lock
