@@ -9,9 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid"
 	log "github.com/sirupsen/logrus"
+	"github.com/teamhanko/apple-wwdc21-webauthn-example/config"
+	"github.com/teamhanko/apple-wwdc21-webauthn-example/models"
 	"github.com/teamhanko/hanko-sdk-golang/webauthn"
-	"gitlab.com/hanko/apple-wwdc21-webauthn-example/config"
-	"gitlab.com/hanko/apple-wwdc21-webauthn-example/models"
 )
 
 var apiClient *webauthn.Client
