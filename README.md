@@ -30,7 +30,7 @@ git clone https://github.com/teamhanko/apple-wwdc21-webauthn-example
 cd apple-wwdc21-webauthn-example
 ```
 
-2. Configure the API URL, API Key ID and API secret in the `config/config.yaml` file:
+2. Configure the API URL, API Key ID and API secret by copying the `config/config.template.yaml` file to `config/config.yaml` and fill in the values:
 
    - Enter your API URL: `apiUrl: "YOUR_API_URL"`
    - Enter your API Key ID: `apiKeyId: "YOUR_API_KEY_ID"`
