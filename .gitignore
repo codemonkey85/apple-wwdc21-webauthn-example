@@ -8,3 +8,5 @@ out/
 *.dylib
 
 .test
+
+config/config.yaml
