@@ -8,6 +8,8 @@ This example application delivers the "Adopt WebAuthn to your server" part of th
 
 It creates a webserver on port 3000 with a basic website and authentication using Passkeys (aka WebAuthn credentials).
 
+You can find this demo in action here: https://apple-passkey.demo.hanko.io/
+
 ## Prerequisites
 
 - Go 1.15

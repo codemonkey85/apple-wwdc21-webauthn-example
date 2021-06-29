@@ -2,3 +2,4 @@ apiUrl: "YOUR_API_URL"
 apiKeyId: "YOUR_API_KEY_ID"
 apiSecret: "YOUR_API_SECRET"
 sessionSecret: "SuperSecureSecret"    # Change in Production
+iosAppId: "YOUR_IOS_APP_ID"

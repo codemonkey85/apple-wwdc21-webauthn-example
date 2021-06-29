@@ -13,6 +13,7 @@ type config struct {
 	ApiSecret     string
 	ApiKeyId      string
 	SessionSecret string
+	IosAppId      string
 }
 
 var C *config
