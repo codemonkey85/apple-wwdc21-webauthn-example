@@ -193,6 +193,15 @@ func main() {
 		c.Redirect(http.StatusTemporaryRedirect, "/")
 	})
 
+	r.GET("/.well-known/apple-app-site-association", func(c *gin.Context) {
+		appleAppSiteAssociation := models.AppleAppSiteAssociation{
+			WebCredentials: models.WebCredentials{
+				Apps: []string{config.C.IosAppId},
+			},
+		}
+		c.JSON(http.StatusOK, appleAppSiteAssociation)
+	})
+
 	log.Println("Starting server on localhost:3000")
 	log.Fatal(r.Run(":3000"))
 }

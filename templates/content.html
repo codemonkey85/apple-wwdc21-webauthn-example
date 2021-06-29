@@ -3,22 +3,39 @@
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta charset="UTF-8">
     <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <title>Apple Passkey Demo with Hanko Authentication API</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
-    <a class="navbar-brand" href="#">Apple Passkey Demo with Hanko Authentication API</a>
-    <div>
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="btn btn-danger btn-md" href="/logout">Logout</a></li>
-        </ul>
-    </div>
-</nav>
-<div class="container pt-5">
-    <h2 class="text-danger">Hi {{ .username }}</h2>
-    <p>You have successfully logged in!</p>
+<div class="backgroundWrapper" role="presentation">
+    <img src="/assets/images/backgrounds/gradient2.png" class="backgroundImage" alt="abstract gradient background" />
 </div>
+<div id="main" class="container pt-5">
+    <div class="row text-center justify-content-center align-items-center">
+        <div class="col-sm">
+            <form class="form">
+                <h3 class="mb-4">Hi {{ .username }}</h3>
+                <figure class="avatar">
+                    <img src="/assets/images/avatars/avatar3.png" class="avatarImage" alt="3d rendered random avatar of a person" />
+                </figure>
+                <div class="alertBox alertBox--hidden">
+                    <p class="alertMessage">Something went wrong</p>
+                </div>
+                <p>You have successfully signed in!</p>
+                <a class="btn btn-danger hanko-button btn-md mt-4" href="/logout">Sign out</a>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="loading loading--active">
+    <div class="loadingWrapper">
+      <div class="loadingDot" />
+    </div>
+</div>
+<script type="application/javascript" src="/assets/ui.js"></script>
+<script type="application/javascript" src="/assets/app.js"></script>
 </body>
 </html>
