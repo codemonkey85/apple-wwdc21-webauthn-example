@@ -11,7 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/teamhanko/apple-wwdc21-webauthn-example/config"
 	"github.com/teamhanko/apple-wwdc21-webauthn-example/models"
-	"github.com/teamhanko/hanko-sdk-golang/webauthn"
+	"github.com/teamhanko/hanko-go/webauthn"
 )
 
 var apiClient *webauthn.Client
